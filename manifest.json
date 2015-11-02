@@ -11,6 +11,7 @@
   },
   "default_locale": "en",
   "options_page": "src/options_custom/index.html",
+  "minimum_chrome_version": "42",
   "page_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "page action demo",
@@ -22,7 +23,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.google.com/*"
+        "https://*/*",
+        "http://*/*"
       ],
       "css": [
         "src/inject/inject.css"
@@ -30,7 +32,8 @@
     },
     {
       "matches": [
-        "https://www.google.com/*"
+        "https://*/*",
+        "http://*/*"
       ],
       "js": [
         "src/inject/inject.js"
