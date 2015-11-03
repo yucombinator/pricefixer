@@ -2,7 +2,7 @@
 
 // Constants for currency and prices
 const currencySigns = "(\\$|\\¥|\\€|\\£)";
-const suspectCosts = "98|97|99|95|45|47";
+const suspectCosts = "01|98|97|99|95|45|47";
 
 // let suspectCosts = concatnate the array
 
@@ -10,7 +10,9 @@ class Scanner{
   constructor(options) {
     if(options){
       //TODO this.underline = options.underline;
-      this.decimal = false; //show decimal
+      this.decimal = options.decimal; //show decimal
+    }else{
+      this.decimal = true;
     }
     this.offset = 0;
   }
@@ -34,18 +36,18 @@ class Scanner{
       priceString = priceString.slice(1);
       let price = Math.round(parseFloat(priceString)*10)/10;
       if(this.decimal || price % 1 != 0){ //if decimal mode is enabled or if the number is not whole
-        priceString = price.toFixed(2) + sign[0];
+        priceString = sign[0] + price.toFixed(2);
       }else{
-        priceString = price + sign[0];
+        priceString = sign[0] + price;
       }
     }else{
       //postfix
       priceString = priceString.slice(0, sign.index);
       let price = Math.round(parseFloat(priceString)*10)/10;
       if(this.decimal || price % 1 != 0){
-        priceString = sign[0] + price.toFixed(2);
+        priceString = price.toFixed(2) + sign[0];
       }else{
-        priceString = sign[0] + price;
+        priceString = price + sign[0];
       }
     }
     return priceString;
