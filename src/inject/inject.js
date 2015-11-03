@@ -2,7 +2,7 @@
 
 // Constants for currency and prices
 const currencySigns = "((CDN\\$\\s*)|\\$|\\¥|\\€|\\£)";
-const suspectCosts = "01|98|97|99|95|45|47";
+const suspectCosts = "01|98|97|99|95|45|46|47|48|49";
 
 // let suspectCosts = concatnate the array
 
