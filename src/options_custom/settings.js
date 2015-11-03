@@ -1,6 +1,17 @@
 window.addEvent("domready", function () {
     // Option 1: Use the manifest:
     new FancySettings.initWithManifest(function (settings) {
+        chrome.storage.sync.get(
+            {
+                'store.settings.tooltip': 'true',  //default values
+                'store.settings.underline': 'true',
+                'store.settings.decimal': 'true'
+            },
+        function(items){ 
+            settings.manifest.tooltip.element.checked = items['store.settings.tooltip'];
+            settings.manifest.underline.element.checked = items['store.settings.underline'];
+            settings.manifest.decimal.element.checked = items['store.settings.decimal'];
+        });
     });
     
     // Option 2: Do everything manually:

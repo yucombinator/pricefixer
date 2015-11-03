@@ -128,18 +128,13 @@ class Scanner{
   }
 }
 
-chrome.storage.sync.get(null,
+chrome.storage.sync.get(
+  {
+    'store.settings.tooltip': 'true',  //default values
+    'store.settings.underline': 'true',
+    'store.settings.decimal': 'true'
+  },
 function(items){ 
-    //default values
-    if(items['store.settings.tooltip'] == undefined){
-      items['store.settings.tooltip'] = false;
-    }
-    if(!items['store.settings.underline'] == undefined){
-      items['store.settings.underline'] = false;
-    }
-    if(!items['store.settings.decimal'] == undefined){
-      items['store.settings.decimal'] = false;
-    }
     let settings = {
       tooltip: items['store.settings.tooltip'],
       underline: items['store.settings.underline'],
