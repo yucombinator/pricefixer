@@ -21,7 +21,8 @@
         name = "store." + this.name + "." + name;
         if (localStorage.getItem(name) === null) { return undefined; }
         try {
-            return JSON.parse(localStorage.getItem(name));
+            var val = localStorage.getItem(name);
+            return JSON.parse(val);
         } catch (e) {
             return null;
         }
@@ -40,8 +41,11 @@
                     value = null;
                 }
             }
-            
-            localStorage.setItem("store." + this.name + "." + name, value);
+            var field = "store." + this.name + "." + name;
+            localStorage.setItem(field, value);
+            var json = { };
+            json[field] = value;
+            chrome.storage.sync.set(json);
         }
         
         return this;

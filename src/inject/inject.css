@@ -5,8 +5,9 @@
 /* Add this attribute to the element that needs a tooltip */
 [data-tooltip] {
   position: relative;
-  z-index: 2;
+  z-index: 99;
   cursor: pointer;
+  overflow: visible;
 }
 
 /* Hide the tooltip content by default */

@@ -1,9 +1,9 @@
 {
-  "name": "CHANGE THIS : Extension boilerplate",
-  "version": "0.0.1",
+  "name": "PriceFixer",
+  "version": "0.1.0",
   "manifest_version": 2,
-  "description": "This extension was created with the awesome extensionizr.com",
-  "homepage_url": "http://extensionizr.com",
+  "description": "A browser plugin that just rounds all online retail prices up to the nearest unit so all those $10.00 and $19.99 bullshit prices go away. ",
+  "homepage_url": "https://github.com/icechen1/pricefixer",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -18,6 +18,7 @@
     "default_popup": "src/page_action/page_action.html"
   },
   "permissions": [
+    "storage",
     "https://*/*"
   ],
   "content_scripts": [
@@ -36,6 +37,7 @@
         "http://*/*"
       ],
       "js": [
+        "src/options_custom/lib/store.js",
         "src/inject/inject.js"
       ]
     }

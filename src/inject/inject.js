@@ -8,13 +8,8 @@ const suspectCosts = "01|98|97|99|95|45|47";
 
 class Scanner{
   constructor(options) {
-    if(options){
-      //TODO this.underline = options.underline;
-      this.decimal = options.decimal; //show decimal
-    }else{
-      this.decimal = true;
-    }
-    this.offset = 0;
+    //Load settings
+    this.settings = options;
   }
   
   doPatternMatch(searchString){
@@ -35,16 +30,16 @@ class Scanner{
       //prefix
       priceString = priceString.slice(sign.index + sign[0].length);
       let price = Math.round(parseFloat(priceString)*10)/10;
-      if(this.decimal || price % 1 != 0){ //if decimal mode is enabled or if the number is not whole
+      if(this.settings.decimal == 'true' || price % 1 != 0){ //if decimal mode is enabled or if the number is not whole
         priceString = sign[0] + price.toFixed(2);
       }else{
         priceString = sign[0] + price;
       }
     }else{
       //postfix
-      priceString = priceString.slice(0, sign.index + sign[0].length);
+      priceString = priceString.slice(0, sign.index);
       let price = Math.round(parseFloat(priceString)*10)/10;
-      if(this.decimal || price % 1 != 0){
+      if(this.settings.decimal == 'true' || price % 1 != 0){
         priceString = price.toFixed(2) + sign[0];
       }else{
         priceString = price + sign[0];
@@ -52,20 +47,17 @@ class Scanner{
     }
     return priceString;
   }
-  
-  splice(parentStr, s, index, toRemove, useOffset){
-    let str = (parentStr.slice(0,index + this.offset) + s + parentStr.slice(index + this.offset + toRemove));
-    if(useOffset)this.offset += s.length - toRemove;
-    return str;
-  }
-  
+
   replaceAtIndex(textNode, match){
     let matchedString = match[0];
     let matchLength = matchedString.length;
     let matchIndex = textNode.nodeValue.indexOf(matchedString);
 
+    if(matchIndex < 0){
+      return; //not found
+    }
+    
     matchedString = this.replacePrice(matchedString);
-    //console.log(textNode.nodeValue, match[0], matchedString, matchLength, matchIndex);  
     
     //add the span opening and closing tag
     
@@ -75,11 +67,15 @@ class Scanner{
     
     let span = document.createElement('span');
     textNode.parentNode.insertBefore(span,nodeThree);
-    span.className = "pricefixer_tag";
-    span.setAttribute("data-tooltip", match[0]); //original value
+
+    if(this.settings.underline == 'true'){
+      span.className = "pricefixer_tag";
+    }
+    if(this.settings.tooltip  == 'true'){
+      span.setAttribute("data-tooltip", match[0]); //original value
+    }
     span.appendChild(nodeTwo);
     
-    //return this.splice(textNode, matchedString, match.index, matchLength, false);
   }
   
   tryAndReplace(textNode){
@@ -131,18 +127,25 @@ class Scanner{
     }
   }
 }
- 
-//start scanning for prices to replace
-let scanner = new Scanner();
-scanner.scanElements();
 
-chrome.extension.sendMessage({}, function(response) {
-  var readyStateCheckInterval = setInterval(function() {
-  if (document.readyState === "complete") {
-    clearInterval(readyStateCheckInterval);
-
-   
-
-  }
-  }, 10);
+chrome.storage.sync.get(null,
+function(items){ 
+    //default values
+    if(items['store.settings.tooltip'] == undefined){
+      items['store.settings.tooltip'] = false;
+    }
+    if(!items['store.settings.underline'] == undefined){
+      items['store.settings.underline'] = false;
+    }
+    if(!items['store.settings.decimal'] == undefined){
+      items['store.settings.decimal'] = false;
+    }
+    let settings = {
+      tooltip: items['store.settings.tooltip'],
+      underline: items['store.settings.underline'],
+      decimal: items['store.settings.decimal']
+    }
+    //start scanning for prices to replace
+    let scanner = new Scanner(settings);
+    scanner.scanElements();
 });

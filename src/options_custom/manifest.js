@@ -1,134 +1,56 @@
 // SAMPLE
 this.manifest = {
-    "name": "My Extension",
+    "name": "PriceFixer",
     "icon": "icon.png",
     "settings": [
         {
-            "tab": i18n.get("information"),
-            "group": i18n.get("login"),
-            "name": "username",
-            "type": "text",
-            "label": i18n.get("username"),
-            "text": i18n.get("x-characters")
-        },
-        {
-            "tab": i18n.get("information"),
-            "group": i18n.get("login"),
-            "name": "password",
-            "type": "text",
-            "label": i18n.get("password"),
-            "text": i18n.get("x-characters-pw"),
-            "masked": true
-        },
-        {
-            "tab": i18n.get("information"),
-            "group": i18n.get("login"),
-            "name": "myDescription",
-            "type": "description",
-            "text": i18n.get("description")
-        },
-        {
-            "tab": i18n.get("information"),
-            "group": i18n.get("logout"),
-            "name": "myCheckbox",
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Tooltip"),
+            "name": "tooltip",
             "type": "checkbox",
             "label": i18n.get("enable")
         },
         {
-            "tab": i18n.get("information"),
-            "group": i18n.get("logout"),
-            "name": "myButton",
-            "type": "button",
-            "label": i18n.get("disconnect"),
-            "text": i18n.get("logout")
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Tooltip"),
+            "name": "tooltipDescription",
+            "type": "description",
+            "text": "Show a tooltip when you hover over a price that has been rounded up."
         },
         {
-            "tab": "Details",
-            "group": "Sound",
-            "name": "noti_volume",
-            "type": "slider",
-            "label": "Notification volume:",
-            "max": 1,
-            "min": 0,
-            "step": 0.01,
-            "display": true,
-            "displayModifier": function (value) {
-                return (value * 100).floor() + "%";
-            }
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Underline"),
+            "name": "underline",
+            "type": "checkbox",
+            "label": i18n.get("enable")
         },
         {
-            "tab": "Details",
-            "group": "Sound",
-            "name": "sound_volume",
-            "type": "slider",
-            "label": "Sound volume:",
-            "max": 100,
-            "min": 0,
-            "step": 1,
-            "display": true,
-            "displayModifier": function (value) {
-                return value + "%";
-            }
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Underline"),
+            "name": "underlineDescription",
+            "type": "description",
+            "text": "Underline prices that have been modified by the extension."
         },
         {
-            "tab": "Details",
-            "group": "Food",
-            "name": "myPopupButton",
-            "type": "popupButton",
-            "label": "Soup 1 should be:",
-            "options": {
-                "groups": [
-                    "Hot", "Cold",
-                ],
-                "values": [
-                    {
-                        "value": "hot",
-                        "text": "Very hot",
-                        "group": "Hot",
-                    },
-                    {
-                        "value": "Medium",
-                        "group": 1,
-                    },
-                    {
-                        "value": "Cold",
-                        "group": 2,
-                    },
-                    ["Non-existing"]
-                ],
-            },
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Decimals"),
+            "name": "decimal",
+            "type": "checkbox",
+            "label": i18n.get("enable")
         },
         {
-            "tab": "Details",
-            "group": "Food",
-            "name": "myListBox",
-            "type": "listBox",
-            "label": "Soup 2 should be:",
-            "options": [
-                ["hot", "Hot and yummy"],
-                ["cold"]
-            ]
+            "tab": i18n.get("Features"),
+            "group": i18n.get("Decimals"),
+            "name": "decimalDescription",
+            "type": "description",
+            "text": "Show decimal points after a price."
         },
         {
-            "tab": "Details",
-            "group": "Food",
-            "name": "myRadioButtons",
-            "type": "radioButtons",
-            "label": "Soup 3 should be:",
-            "options": [
-                ["hot", "Hot and yummy"],
-                ["cold"]
-            ]
+            "tab": i18n.get("About"),
+            "group": i18n.get("About"),
+            "name": "myDescription",
+            "type": "description",
+            "text": "This is a a browser plugin that just rounds all online retail prices up to the nearest unit so all those $10.00 and $19.99 bullshit prices go away. <a href='https://github.com/icechen1/pricefixer'>GitHub website</a>"
         }
-    ],
-    "alignment": [
-        [
-            "username",
-            "password"
-        ],
-        [
-            "noti_volume",
-            "sound_volume"
-        ]
     ]
 };
