@@ -8,9 +8,10 @@ window.addEvent("domready", function () {
                 'store.settings.decimal': 'true'
             },
         function(items){ 
-            settings.manifest.tooltip.element.checked = items['store.settings.tooltip'];
-            settings.manifest.underline.element.checked = items['store.settings.underline'];
-            settings.manifest.decimal.element.checked = items['store.settings.decimal'];
+            console.log(items);
+            settings.manifest.tooltip.element.checked = (items['store.settings.tooltip'] == 'true')? true: false;
+            settings.manifest.underline.element.checked = (items['store.settings.underline'] == 'true')? true: false;
+            settings.manifest.decimal.element.checked = (items['store.settings.decimal'] == 'true')? true: false;
         });
     });
     
