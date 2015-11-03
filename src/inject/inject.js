@@ -1,9 +1,5 @@
 "use strict";
 
-// Constants for html elements to inject
-const front = '<span class="pricefixer_tag">';
-const back = '</span>';
-
 // Constants for currency and prices
 const currencySigns = "(\\$|\\¥|\\€|\\£)";
 const suspectCosts = "98|97|99|95|45|47";
@@ -61,59 +57,89 @@ class Scanner{
     return str;
   }
   
-  replaceAtIndex(innerHTML, match){
+  replaceAtIndex(textNode, match){
     let matchedString = match[0];
     let matchLength = matchedString.length;
-    
+    let matchIndex = textNode.nodeValue.indexOf(matchedString);
+
     matchedString = this.replacePrice(matchedString);
+    //console.log(textNode.nodeValue, match[0], matchedString, matchLength, matchIndex);  
     
     //add the span opening and closing tag
-    matchedString = front + matchedString + back;
     
-    return this.splice(innerHTML, matchedString, match.index, matchLength, true);
+    let nodeTwo = textNode.splitText(matchIndex);
+    let nodeThree = nodeTwo.splitText(matchLength);
+    nodeTwo.nodeValue = matchedString;
+    
+    let span = document.createElement('span');
+    textNode.parentNode.insertBefore(span,nodeThree);
+    span.className = "pricefixer_tag";
+    span.setAttribute("data-tooltip", match[0]); //original value
+    span.appendChild(nodeTwo);
+    
+    //return this.splice(textNode, matchedString, match.index, matchLength, false);
   }
   
-  tryAndReplace(innerHTML){
-    let matchedSet = this.doPatternMatch(innerHTML);
+  tryAndReplace(textNode){
+    let matchedSet = this.doPatternMatch(textNode.nodeValue);
     if(matchedSet){
-      console.log(matchedSet);
+      //console.log(matchedSet);
       for(let match of matchedSet){
-        console.log(match);
-        innerHTML = this.replaceAtIndex(innerHTML, match);
+        //console.log(match);
+        this.replaceAtIndex(textNode, match);
       }
     }
-    return innerHTML;
   }
 
   scanElements(){
     //get all elements on the page
     //let all = document.querySelectorAll("div,p,span,h1,h2,h3,h4,h5,h6,li,ol");
-    console.log("Scan starts"); 
-    let el = document.body;
-    this.tryAndReplace(el.innerHTML);
-    /*
-    for(let i = 0; i < all.length; i++) {
-      let el = all[i];
-      //scan for presence of currency signs in text fields
-      for(let currency of currencySigns) {
-        if(el.textContent && el.textContent.indexOf(currency) > -1){
-          el.innerHTML = this.tryAndReplace(el.innerHTML, currency);
-          console.log("Found");
+    //console.log("Scan starts"); 
+    this.walk(document.body);
+  }
+  
+  handleText(textNode) {
+    var v = textNode.nodeValue;
+    v = this.tryAndReplace(textNode);
+    //textNode.nodeValue = v;
+  }
+  
+  walk(node) {
+    // I stole this function from here:
+    // http://is.gd/mwZp7E
+    
+    var child, next;
+    switch ( node.nodeType )  
+    {
+      case 1:  // Element
+      case 9:  // Document
+      case 11: // Document fragment
+        child = node.firstChild;
+        while ( child ) 
+        {
+          next = child.nextSibling;
+          this.walk(child);
+          child = next;
         }
-      }
+        break;
+    
+      case 3: // Text node
+        this.handleText(node);
+        break;
     }
-    */
   }
 }
+ 
+//start scanning for prices to replace
+let scanner = new Scanner();
+scanner.scanElements();
 
 chrome.extension.sendMessage({}, function(response) {
   var readyStateCheckInterval = setInterval(function() {
   if (document.readyState === "complete") {
     clearInterval(readyStateCheckInterval);
-    
-    //start scanning for prices to replace
-    let scanner = new Scanner();
-    scanner.scanElements();
+
+   
 
   }
   }, 10);
