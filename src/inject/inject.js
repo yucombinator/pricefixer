@@ -1,7 +1,7 @@
 "use strict";
 
 // Constants for currency and prices
-const currencySigns = "(\\$|\\¥|\\€|\\£)";
+const currencySigns = "((CDN\\$\\s*)|\\$|\\¥|\\€|\\£)";
 const suspectCosts = "01|98|97|99|95|45|47";
 
 // let suspectCosts = concatnate the array
@@ -33,7 +33,7 @@ class Scanner{
     let sign = new RegExp(currencySigns).exec(priceString);
     if(sign.index == 0){
       //prefix
-      priceString = priceString.slice(1);
+      priceString = priceString.slice(sign.index + sign[0].length);
       let price = Math.round(parseFloat(priceString)*10)/10;
       if(this.decimal || price % 1 != 0){ //if decimal mode is enabled or if the number is not whole
         priceString = sign[0] + price.toFixed(2);
@@ -42,7 +42,7 @@ class Scanner{
       }
     }else{
       //postfix
-      priceString = priceString.slice(0, sign.index);
+      priceString = priceString.slice(0, sign.index + sign[0].length);
       let price = Math.round(parseFloat(priceString)*10)/10;
       if(this.decimal || price % 1 != 0){
         priceString = price.toFixed(2) + sign[0];
